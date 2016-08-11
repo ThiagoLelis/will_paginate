@@ -2,7 +2,6 @@ require 'will_paginate/per_page'
 require 'will_paginate/page_number'
 require 'will_paginate/collection'
 require 'active_record'
-require 'byebug'
 
 module WillPaginate
   # = Paginating finders for ActiveRecord models
@@ -162,7 +161,7 @@ module WillPaginate
 
         #######################################################
         # rel = limit(per_page.to_i).page(pagenum)
-        rel = limit(per_page.to_i).page(pagenum, custom_offset)
+        rel = limit(per_page.to_i).page(pagenum, custom_offset.nil? ? 0 : custom_offset)
         #######################################################
 
         rel = rel.apply_finder_options(options) if options.any?
@@ -180,7 +179,7 @@ module WillPaginate
         per_page = rel.limit_value || self.per_page
         ##################################################################
         # rel = rel.offset(pagenum.to_offset(per_page).to_i)
-        rel = rel.offset(pagenum.to_offset(per_page).to_i + custom_offset.to_i)
+        rel = rel.offset(pagenum.to_offset(per_page).to_i + custom_offset)
         ##################################################################
         rel = rel.limit(per_page) unless rel.limit_value
         rel.current_page = pagenum
