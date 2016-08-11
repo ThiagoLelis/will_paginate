@@ -21,7 +21,14 @@ describe WillPaginate::ActiveRecord do
       users.length.should == 5
     }.should run_queries(2)
   end
-  
+
+  it "should paginate with offset" do
+    lambda {
+      users = User.paginate(:page => 1, :per_page => 2, :offset => 2).to_a
+      users.length.should == 2
+    }.should run_queries(2)
+  end
+
   it "should fail when encountering unknown params" do
     lambda {
       User.paginate :foo => 'bar', :page => 1, :per_page => 4
